@@ -51,7 +51,6 @@
       </div>
     </div>
     {% if img %}
-    <!-- <h1>{{img}}</h1> -->
     <img src="{{img}}" alt="" width="100px" style="margin: 15px;">
     <div class="row">
       <table class="table table-striped table-hover">
@@ -74,7 +73,9 @@
             </th>
             <th>
               <div class="table-content">
-                <img src="../{{a_block['file']}}" alt="" width="50px" height="50px" />
+                <svg width="50" height="50" xmlns="http://www.w3.org/2000/svg">
+                  <image xlink:href="../{{a_block['file']}}" width="50" height="50"></image>
+                </svg>
               </div>
             </th>
             <td>
