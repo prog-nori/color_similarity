@@ -1,14 +1,11 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
 from werkzeug.utils import secure_filename
-import csv
 import os
-from flask import send_from_directory
 from util import (
     CSV_FILE,
     csv_row_2_dict_all,
     find_similar_colors,
     get_formatted_datetime,
-    get_mean_colors,
     read_csv_as_nested_list
     )
 
@@ -41,7 +38,6 @@ def find():
     与えられた画像から近似色のブロックを検索する
     """
     if request.method == 'POST':
-        # img = request.args.get('image')
         image = request.files['image']
         if image.filename == '':
             flash('ファイルがありません')
@@ -58,14 +54,11 @@ def find():
     return render_template('find.html')
 
 @app.route('/uploads/<filename>')
-# ファイルを表示する
 def uploaded(filename):
-    # return filename
+    """
+    画像アップロード後の画面
+    """
     target = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    r, g, b, h, s, v = get_mean_colors(target)
-    print('rgb({}, {}, {})'.format(r, g, b), 'hsl({}, {}, {})'.format(h, s, v))
-    # return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-    print('hello', target)
     similars = find_similar_colors(target)
     a_list = [d.get('info') for d in similars]
     return render_template('similar.html', img=target[len('./templates'):], similars=a_list)
