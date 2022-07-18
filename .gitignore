@@ -1,0 +1,10 @@
+# テクスチャはあげちゃダメ、ｾﾞｯﾀｲ
+templates/images/textures/
+
+# アップロードされた画像もいらない
+templates/images/uploads/*.png
+templates/images/uploads/*.jpg
+
+# pycacheもいらない
+*/**/__pycache__/
+__pycache__/
