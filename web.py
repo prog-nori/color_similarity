@@ -1,6 +1,8 @@
+from crypt import methods
 from flask import Flask, render_template, request, flash, redirect, url_for
 from werkzeug.utils import secure_filename
 import os
+from src.util.text.pagination import Pagination
 from src.util.utility import (
     CSV_FILE,
     csv_row_2_dict_all,
@@ -28,12 +30,22 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/blocks')
-def block_list():
+@app.route('/blocks', methods=['GET'])
+def block_list(lim=20):
+    req = request.args
+    page = req.get('page')
+    if page is None:
+        page = 0
+    else:
+        page = int(page)
+    offset, limit = page * lim, (page + 1) * lim
+
     csv_lines = read_csv_as_nested_list(CSV_FILE)
     a_list = csv_row_2_dict_all(csv_lines)
 
-    return render_template('blocks.html', title='ブロックリスト', array=a_list)
+    pagination = Pagination(offset, limit, a_list)
+
+    return render_template('blocks.html', title='ブロックリスト', pagination=pagination)
 
 
 @app.route('/find', methods=['GET', 'POST'])
