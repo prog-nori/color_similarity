@@ -59,35 +59,39 @@
         </thead>
         <tbody>
           {% for a_block in array %}
-          <tr style="height: 70px">
-            <th scope="row">
-              <div class="table-content">
-                {{ loop.index }}
-              </div>
-            </th>
-            <th>
-              <div class="table-content">
-                <img src="{{a_block['file']}}" alt="" width="50px" height="50px" />
-              </div>
-            </th>
-            <td>
-              <div class="table-content">
-                <span>{{a_block['rgb']}}</span>
-                <div class="color-box" style="background: {{a_block['rgb']}}"></div>
-              </div>
-            </td>
-            <td>
-              <div class="table-content">
-                <span>{{a_block['hsv']}}</span>
-                <div class="color-box"
-                  style="background: hsl({{ a_block['hue'] }}, {{ a_block['saturation'] }}%, {{ a_block['value'] }}%)">
+            <tr style="height: 70px">
+              <th scope="row">
+                <div class="table-content">
+                  {{ loop.index }}
                 </div>
-              </div>
-            </td>
-            <td>
-              <div class="table-content">{{ a_block['file'] }}</div>
-            </td>
-          </tr>
+              </th>
+              <th>
+                <div class="table-content">
+                  <img src="{{a_block.file}}" alt="" width="50px" height="50px" />
+                </div>
+              </th>
+              <td>
+                <div class="table-content">
+                  <span>{{a_block.rgb}}</span>
+                  <div class="color-box" style="background: {{a_block.rgb}}"></div>
+                </div>
+              </td>
+              <td>
+                <div class="table-content">
+                  <span>{{a_block.hsv}}</span>
+                  <div class="color-box"
+                    style="background: {{a_block.hsv}}">
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="table-content">
+                  <a href="{{a_block.file}}">{{a_block.name}}</a>
+                  <br>
+                  <small>{{a_block.file}}</small>
+                </div>
+              </td>
+            </tr>
           {% endfor %}
         </tbody>
       </table>
