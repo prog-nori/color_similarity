@@ -6,14 +6,14 @@ def main():
     a_list = []
 
     ignore_string = './templates/'
-    textures = './templates/images/textures'
+    textures = './templates/images/svg/textures'
 
     ignore_dirs = ['colormap', 'effect', 'entity', 'environment', 'font', 'gui', 'item', 'map', 'misc', 'mob_effect', 'models', 'painting', 'particle']
 
     for file in find_all_files(textures):
         r, g, b, h, s, v = get_mean_colors(file)
         file = file[len(ignore_string):]
-        if file[-4:] == '.png':
+        if file[-4:] == '.svg':
             another_list = ['/{}/'.format(ignore_dir) in file for ignore_dir in ignore_dirs]
             if True not in another_list:
                 a_list.append([file, r, g, b, h, s, v])
