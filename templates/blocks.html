@@ -58,7 +58,7 @@
           </tr>
         </thead>
         <tbody>
-          {% for a_block in pagination.items %}
+          {% for a_block in array %}
             <tr style="height: 70px">
               <th scope="row">
                 <div class="table-content">
@@ -95,6 +95,46 @@
           {% endfor %}
         </tbody>
       </table>
+      <nav aria-label="...">
+        <ul class="pagination pagination-lg justify-content-center">
+          {% if current <= 0 %}
+          <li class="page-item disabled">
+            <span class="page-link">前へ</span>
+          </li>
+          {% else %}
+          <li class="page-item">
+            <a class="page-link" href="/blocks?page={{current - 1}}">前へ</a>
+          </li>
+          {% endif %}
+
+
+          {% for page in pagination %}
+          
+          {% if page.label == '...' %}
+          <li class="page-item disabled">
+            <span class="page-link">...</span>
+          </li>
+          {% elif page.active %}
+          <li class="page-item active">
+            <a class="page-link" href="/blocks?page={{page.num}}">{{page.label}}</a>
+          </li>
+          {% else %}
+          <li class="page-item">
+            <a class="page-link" href="/blocks?page={{page.num}}">{{page.label}}</a>
+          </li>
+          {% endif %}
+
+          {% endfor %}
+          <!-- <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item active">
+            <span class="page-link">2</span>
+          </li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li> -->
+          <li class="page-item">
+            <a class="page-link" href="#">次へ</a>
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
   <!-- <h1>Hello, world!</h1> -->

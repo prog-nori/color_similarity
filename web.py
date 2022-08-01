@@ -1,4 +1,3 @@
-from crypt import methods
 from flask import Flask, render_template, request, flash, redirect, url_for
 from werkzeug.utils import secure_filename
 import os
@@ -45,7 +44,10 @@ def block_list(lim=20):
 
     pagination = Pagination(offset, limit, a_list)
 
-    return render_template('blocks.html', title='ブロックリスト', pagination=pagination)
+    contents = pagination.get_pagination_content(page)
+    print(['<{}>'.format(p.label) if p.active else p.label for p in contents])
+
+    return render_template('blocks.html', title='ブロックリスト', array = pagination.items, pagination=contents, current=page)
 
 
 @app.route('/find', methods=['GET', 'POST'])
