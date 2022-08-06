@@ -1,5 +1,6 @@
 # テクスチャはあげちゃダメ、ｾﾞｯﾀｲ
 templates/images/textures/
+templates/images/svg/**
 
 # アップロードされた画像もいらない
 templates/images/uploads/*.png
@@ -8,3 +9,8 @@ templates/images/uploads/*.jpg
 # pycacheもいらない
 */**/__pycache__/
 __pycache__/
+*/**/*.pyc
+*.pyc
+
+# このファイルもあげちゃだめ
+static/481c1390987f2432f8385d08f219728060e2144b

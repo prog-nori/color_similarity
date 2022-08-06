@@ -73,27 +73,27 @@
             </th>
             <th>
               <div class="table-content">
-                <svg width="50" height="50" xmlns="http://www.w3.org/2000/svg">
-                  <image xlink:href="../{{a_block['file']}}" width="50" height="50"></image>
+                <svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+                  <image xlink:href="../{{a_block.file}}" width="64" height="64"></image>
                 </svg>
               </div>
             </th>
             <td>
               <div class="table-content">
-                <span>{{a_block['rgb']}}</span>
+                <span>{{a_block.rgb}}</span>
                 <div class="color-box" style="background: {{a_block['rgb']}}"></div>
               </div>
             </td>
             <td>
               <div class="table-content">
-                <span>{{a_block['hsv']}}</span>
+                <span>{{a_block.hsv}}</span>
                 <div class="color-box"
                   style="background: hsl({{ a_block['hue'] }}, {{ a_block['saturation'] }}%, {{ a_block['value'] }}%)">
                 </div>
               </div>
             </td>
             <td>
-              <div class="table-content">{{ a_block['file'] }}</div>
+              <div class="table-content">{{ a_block.file }}</div>
             </td>
           </tr>
           {% endfor %}

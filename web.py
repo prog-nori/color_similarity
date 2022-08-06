@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
 from werkzeug.utils import secure_filename
 import os
-from util import (
+from src.util.utility import (
     CSV_FILE,
     csv_row_2_dict_all,
     find_similar_colors,
@@ -16,14 +16,17 @@ UPLOAD_FOLDER = './templates/images/uploads'
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+
 def allwed_file(filename):
     # .があるかどうかのチェックと、拡張子の確認
     # OKなら１、だめなら0
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/blocks')
 def block_list():
@@ -31,6 +34,7 @@ def block_list():
     a_list = csv_row_2_dict_all(csv_lines)
 
     return render_template('blocks.html', title='ブロックリスト', array=a_list)
+
 
 @app.route('/find', methods=['GET', 'POST'])
 def find():
@@ -53,6 +57,7 @@ def find():
 
     return render_template('find.html')
 
+
 @app.route('/uploads/<filename>')
 def uploaded(filename):
     """
@@ -63,5 +68,6 @@ def uploaded(filename):
     a_list = [d.get('info') for d in similars]
     return render_template('similar.html', img=target[len('./templates'):], similars=a_list)
 
+
 if __name__ == '__main__':
-    app.run(debug = True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)
