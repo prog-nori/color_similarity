@@ -1,4 +1,3 @@
-from operator import ne
 import cv2
 import os
 import csv
@@ -9,7 +8,7 @@ from datetime import datetime
 from src.util.color.translate import get_cielab1976, rgb2lab
 from src.models.block import Block
 
-CSV_FILE = 'output-2022-07-22-19-18-13.csv'
+CSV_FILE = 'data.csv'
 
 
 def get_formatted_datetime():
@@ -31,7 +30,6 @@ def get_mean_colors(an_img_file):
     if img is not None:
         avg_color_per_row = np.average(cv2.imread(an_img_file), axis=0)
         avg_color = np.average(avg_color_per_row, axis=0)
-        # print(avg_color)
         blue = round(avg_color[0])
         green = round(avg_color[1])
         red = round(avg_color[2])
@@ -67,6 +65,7 @@ def csv_row_2_dict(a_line):
     """
     カンマ区切りのcsvを辞書に変換（指定フォーマットを想定）
     """
+    print(len(a_line), a_line[0])
     block = Block(
         file=a_line[0],
         name=a_line[1],

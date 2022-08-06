@@ -1,5 +1,6 @@
 # テクスチャはあげちゃダメ、ｾﾞｯﾀｲ
 templates/images/textures/
+templates/images/svg/**
 
 # アップロードされた画像もいらない
 templates/images/uploads/*.png

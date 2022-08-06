@@ -1,9 +1,7 @@
 #! /usr/bin/env python3
 #  -*- coding: utf-8 -*-
 
-import this
 import cv2
-import numpy as np
 import os
 from pprint import pprint
 
@@ -26,7 +24,7 @@ def get_rgb_data_from_file(file):
     """
     各画素のカラーコードを取得、2次元リストで返す
     """
-    SIZE = 10
+    SIZE = 4
     an_image = cv2.imread(file, -1)
     if an_image is None:
         return None
@@ -35,13 +33,8 @@ def get_rgb_data_from_file(file):
     for h in range(height):
         for w in range(width):
             this_cell = an_image[h, w].tolist()
-            # BGRA
-            # print(an_image[h, w])
-            print(type(this_cell))
             if len(this_cell) == 3:
                 this_cell.append(255)
-                # an_image[h, w].append(255) = 255
-            # print(len(an_image[h, w]), '|', an_image[h, w])
             rgba = 'rgba({}, {}, {}, {})'.format(this_cell[2], this_cell[1], this_cell[0], this_cell[3] / 255)
             a_list.append('\t<rect x="{}" y="{}" width="{}" height="{}" fill="{}" />'.format(w * SIZE, h * SIZE, SIZE, SIZE, rgba))
     return a_list
@@ -52,7 +45,7 @@ def main(args):
     argsで指定されたディレクトリを再帰的に読み込み、ディレクトリ構造を維持したままpng, jpgをsvgへと変換する
     """
     for file in find_all_files(args[0]):
-        svg_elements_list = ['<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">']
+        svg_elements_list = ['<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="64" height="64" style="font-size: 0">']
         grid = get_rgb_data_from_file(file)
         if grid is None:
             continue
@@ -70,12 +63,6 @@ def main(args):
         with open(output_file_name, mode='w') as f:
             f.write(svg_str)
         print(os.path.abspath(output_file_name))
-    #     return
-        
-    #     output_base_file_name = file.split(os.path.join('templates', 'images', os.sep))[1]
-    #     output_file_name = os.path.join(OUTPUT_DIR, output_base_file_name.split('.')[0] + '.svg')
-    #     print(file)
-    # print('fin')
     return
 
 
