@@ -9,6 +9,8 @@ templates/images/uploads/*.jpg
 # pycacheもいらない
 */**/__pycache__/
 __pycache__/
+*/**/*.pyc
+*.pyc
 
 # このファイルもあげちゃだめ
 static/481c1390987f2432f8385d08f219728060e2144b
