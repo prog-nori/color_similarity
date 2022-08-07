@@ -1,15 +1,19 @@
-from flask import Flask, render_template, request, flash, redirect, url_for
+# from flask import Flask, render_template, request, flash, redirect, url_for, jsonify
+from flask import Flask, render_template, request, flash, redirect, url_for, make_response, jsonify
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 import os
 from src.util.utility import (
     CSV_FILE,
     csv_row_2_dict_all,
+    csv_row_2_json_all,
     find_similar_colors,
     get_formatted_datetime,
     read_csv_as_nested_list
     )
 
 app = Flask(__name__, static_folder='./templates/images')
+CORS(app)
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg'])
 UPLOAD_FOLDER = './templates/images/uploads'
@@ -68,6 +72,17 @@ def uploaded(filename):
     a_list = [d.get('info') for d in similars]
     return render_template('similar.html', img=target[len('./templates'):], similars=a_list)
 
+##########################3
+
+@app.route('/servicies/v2/blocks/<page>')
+def get_blocks(page):
+    page = int(page)
+    limit = 50
+    csv_lines = read_csv_as_nested_list(CSV_FILE)
+    a_list, length = csv_row_2_json_all(csv_lines, page, limit)
+    json = jsonify({'size': length, 'blocks': a_list})
+
+    return make_response(json)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

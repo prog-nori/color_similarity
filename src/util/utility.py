@@ -87,6 +87,20 @@ def csv_row_2_dict_all(a_list):
         result.append(csv_row_2_dict(an_element))
     return result
 
+def csv_row_2_json_all(a_list, page, limit):
+    """
+    リストとして与えられた全てのデータを、カンマ区切りのcsvを辞書に変換（指定フォーマットを想定）
+    """
+    result = []
+    reader = [tuple(row) for row in a_list]
+    start = (page-1) * limit
+    if start >= len(reader):
+        return result
+    end = page * limit if page * limit < len(reader) else len(reader)
+    for an_element in reader[start:end]:
+        result.append(csv_row_2_dict(an_element).__dict__)
+    return result, len(reader)
+
 
 def read_csv_as_nested_list(filename):
     """
