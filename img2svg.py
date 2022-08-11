@@ -35,8 +35,14 @@ def get_rgb_data_from_file(file):
             this_cell = an_image[h, w].tolist()
             if len(this_cell) == 3:
                 this_cell.append(255)
-            rgba = 'rgba({}, {}, {}, {})'.format(this_cell[2], this_cell[1], this_cell[0], this_cell[3] / 255)
-            a_list.append('\t<rect x="{}" y="{}" width="{}" height="{}" fill="{}" />'.format(w * SIZE, h * SIZE, SIZE, SIZE, rgba))
+            red = this_cell[2]
+            green = this_cell[1]
+            blue = this_cell[0]
+            alpha = this_cell[3] / 255
+            if alpha > 0:
+                rgba = 'rgba({}, {}, {}, {})'.format(red, green, blue, alpha)
+                a_list.append('<rect x="{}" y="{}" width="{}" height="{}" fill="{}"/>'.format(w * SIZE, h * SIZE, SIZE, SIZE, rgba))
+                # a_list.append('\t<rect x="{}" y="{}" width="{}" height="{}" fill="{}" />'.format(w * SIZE, h * SIZE, SIZE, SIZE, rgba))
     return a_list
 
 
@@ -52,7 +58,8 @@ def main(args):
         else:
             svg_elements_list.extend(grid)
         svg_elements_list.append('</svg>')
-        svg_str = '\n'.join(map(str, svg_elements_list))
+        svg_str = ''.join(map(str, svg_elements_list))
+        # svg_str = '\n'.join(map(str, svg_elements_list))
         head = os.path.join('templates', 'images')
         output_base_file_name = file.split(head)[1]
         new_path_png = os.path.join(OUTPUT_DIR, output_base_file_name[1:])
