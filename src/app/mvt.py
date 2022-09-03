@@ -51,7 +51,7 @@ def find():
                 redirect(request.url)
             filename = '{}--{}.{}'.format(secure_filename(name), get_formatted_datetime(), ext)
             image.save(os.path.join(UPLOAD_FOLDER, filename))
-            return redirect(url_for('uploaded', filename=filename))
+            return redirect(url_for('mvt.uploaded', filename=filename))
 
     return render_template('find.html')
 

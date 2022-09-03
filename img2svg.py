@@ -69,7 +69,7 @@ def main(args):
             os.makedirs(dir_name)
         with open(output_file_name, mode='w') as f:
             f.write(svg_str)
-        print(os.path.abspath(output_file_name))
+        # print(os.path.abspath(output_file_name))
     return
 
 

@@ -17,7 +17,7 @@ class BlockName:
         for key, v in json_dict.items():
             if key[:6] == 'block.':
                 if key == 'block.minecraft.diamond_ore':
-                self._dict[key] = v
+                   self._dict[key] = v
 
     def find(self, path):
         """
@@ -40,7 +40,7 @@ class BlockName:
 def main():
     a_dict = BlockName()
     print(a_dict.get())
-    print(len(a_dict.get().keys()))
+    # print(len(a_dict.get().keys()))
 
 if __name__ == '__main__':
     main()

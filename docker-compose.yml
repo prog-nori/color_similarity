@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  api:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - "./web.py:/web.py"
+      - "./src:/src"
+      - "./templates:/templates"
+      - "./static:/static"
+      - "./data.csv:/data.csv"
+    tty: true
+    environment:
+      TZ: Asia/Tokyo
+      FLASK_APP: web.py
+      FLASK_ENV: development
+    command: flask run -h 0.0.0.0
+  db:
+    build: ./mysql/
+    volumes:
+      - ./mysql/mysql_data:/var/lib/mysql # データの永続化
+      - ./mysql/schema:/docker-entrypoint-initdb.d # 初期化時に実行するSQL
+    environment:
+      - MYSQL_ROOT_PASSWORD=P@ssw0rd

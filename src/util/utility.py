@@ -1,3 +1,4 @@
+import json
 import cv2
 import os
 import csv
@@ -65,7 +66,7 @@ def csv_row_2_dict(a_line):
     """
     カンマ区切りのcsvを辞書に変換（指定フォーマットを想定）
     """
-    print(len(a_line), a_line[0])
+    # print(len(a_line), a_line[0])
     block = Block(
         file=a_line[0],
         name=a_line[1],
@@ -92,12 +93,14 @@ def csv_row_2_json_all(a_list, page, limit):
     リストとして与えられた全てのデータを、カンマ区切りのcsvを辞書に変換（指定フォーマットを想定）
     """
     result = []
-    reader = [tuple(row) for row in a_list]
+    ignore_blocks = get_ignore_blocks()
+    reader = [tuple(row) for row in a_list if row[0].rsplit('/', 1)[-1] not in ignore_blocks]
     start = (page-1) * limit
     if start >= len(reader):
         return result
     end = page * limit if page * limit < len(reader) else len(reader)
     for an_element in reader[start:end]:
+    # for an_element in reader:
         result.append(csv_row_2_dict(an_element).__dict__)
     return result, len(reader)
 
@@ -109,6 +112,15 @@ def read_csv_as_nested_list(filename):
     csv_file = open(filename, 'r', encoding='utf-8', errors='', newline='')
     csv_lines = csv.reader(csv_file, delimiter=",", doublequote=True, lineterminator="\r\n", quotechar='"', skipinitialspace=True)
     return csv_lines
+
+
+def get_ignore_blocks():
+    """
+    除外するブロックのリストを取得
+    """
+    a_file = open(os.path.join('src', 'util', 'ignore_blocks.json'), 'r')
+    ignore_blocks = json.load(a_file)['blocks']
+    return ignore_blocks
 
 
 def pythagorean_proposition(a, b):
