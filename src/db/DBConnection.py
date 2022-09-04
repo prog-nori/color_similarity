@@ -7,7 +7,7 @@ class DBConnection(object):
         MySQLに接続する
         """
         self.connection = pymysql.connect(
-            host='localhost',
+            host='db',
             user='root',
             password='P@ssw0rd',
             database='minecraft_utility',
@@ -15,21 +15,23 @@ class DBConnection(object):
         self.table = table_name
         return
 
-    def __del__(self):
-        """
-        デストラクタ。自身のインスタンス破壊時に実行される
-        MySQLの接続を切断する
-        """
-        self.connection.close()
+    # def __del__(self):
+    #     """
+    #     デストラクタ。自身のインスタンス破壊時に実行される
+    #     MySQLの接続を切断する
+    #     """
+    #     self.connection.close()
     
     def run_query(self, sql, *args):
         """
         クエリを実行する。戻り値は無し
         対象: insert, update, delete
         """
+        print('実行', sql, args)
         with self.connection:
             with self.connection.cursor() as cursor:
-                cursor.executemany(sql, args)
+                print('\n> ', args, type(args))
+                cursor.execute(sql, args)
             self.connection.commit()
         return
     
@@ -49,8 +51,11 @@ class DBConnection(object):
         クエリを実行する。戻り値は有り
         対象: select
         """
+        print('hello')
+        print(args, *args)
         results = []
         with self.connection.cursor() as cursor:
-            cursor.execute(sql, args)
+            print(type(args), '|', args, '|', *args)
+            cursor.execute(sql, *args)
             results = cursor.fetchall()
         return results

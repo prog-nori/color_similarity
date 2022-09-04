@@ -10,3 +10,5 @@ RUN pip install -r ./requirements.txt
 RUN pip install -U flask-cors
 
 RUN pip install opencv-python
+
+ENV PYTHONUNBUFFERED 1

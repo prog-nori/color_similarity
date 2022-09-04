@@ -7,7 +7,7 @@ class DBImagesTable(DBConnection):
         """
         MySQLに接続する
         """
-        super('images')
+        super().__init__('images')
         return
 
     def find(self):
@@ -21,13 +21,16 @@ class DBImagesTable(DBConnection):
         """
         idで一件参照
         """
-        return self.run_query_with_return(f'SELECT * FROM {self.table} WHERE id={id}')
+        return self.run_query_with_return(f'SELECT * FROM {self.table} WHERE id=%s', id)
 
     def add(self, filename):
         """
         追加
         """
-        return self.run_query(f'INSERT INTO {self.table} (id, filename) VALUES (LEFT(UUID(), 8), %s)', filename)
+        uuid = self.run_query_with_return('SELECT LEFT(UUID(), %s) as uuid', 8)[0]['uuid']
+        sql = f'INSERT INTO {self.table} (id, filename) VALUES (%s, %s)'
+        self.run_query(sql, uuid, filename)
+        return uuid
 
     def update(self):
         """

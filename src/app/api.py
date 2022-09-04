@@ -8,6 +8,7 @@ from flask import (
     request,
     url_for
     )
+from src.db.images import DBImagesTable
 from src.util.utility import (
     CSV_FILE,
     csv_row_2_json_all,
@@ -41,12 +42,15 @@ def get_blocks(page):
 
     return make_response(json)
 
-@api.route('/servicies/v2/find/<filename>')
-def api_find(filename):
+@api.route('/servicies/v2/find/<identifier>')
+def api_find(identifier):
     """
-    与えられた画像で検索を行う
+    与えられた画像の識別子で検索を行う
     <s>画像アップロード後の画面</s>
     """
+    db = DBImagesTable()
+    filename = db.get(identifier)[0]['filename']
+    print('FILENAME:', filename)
     target = os.path.join(UPLOAD_FOLDER, filename)
     similars = find_similar_colors(target)
     a_list = [d.get('info').__dict__ for d in similars]
@@ -64,69 +68,23 @@ def api_upload():
     # Todo: [Phase2.0] 画像をアップロードして識別子を返す
     # Todo: [Phase3.0] RDBを実装
     # Todo: [Phase3.0] 同じ画像が存在したら保存せず、その登録IDだけ返す
+    error_msg = 'ファイルがありません'
+    error_response = lambda msg: { 'status': 500, 'message': msg }
+    db = DBImagesTable()
     image = request.files['image']
-    print(68, image)
-    print('条件1:', bool(image.filename == ''))
-    print('条件2:', bool(image and allwed_file(image.filename)))
     if image.filename == '':
-        error_msg = 'ファイルがありません'
-        return {
-            'status': 500,
-            'message': error_msg
-        }
+        return error_response(error_msg)
     elif image and allwed_file(image.filename):
         name, ext = image.filename.rsplit('.', 1)
         if ext is None:
-            error_msg = 'ファイルがありません'
-            return {
-                'status': 500,
-                'message': error_msg
-            }
+            return error_response(error_msg)
         filename = '{}--{}.{}'.format(secure_filename(name), get_formatted_datetime(), ext)
         image.save(os.path.join(UPLOAD_FOLDER, filename))
+        id = db.add(filename)
         return {
             'status': 200,
-            'filename': filename
+            'filename': filename,
+            'id': id
         }
     error_msg = 'ヨキセヌ例外が発生しました'
-    return {
-        'status': 500,
-        'message': error_msg
-    }
-
-# @api.route('/servicies/v2/find', methods=['GET', 'POST'])
-# def api_find():
-#     """
-#     与えられた画像から近似色のブロックを検索する
-#     """
-#     if request.method == 'POST':
-#         image = request.files['image']
-#         if image.filename == '':
-#             raise FileNotFoundError('ファイルがありません')
-#             # flash('ファイルがありません')
-#             # redirect(request.url)
-#         if image and allwed_file(image.filename):
-#             name, ext = image.filename.rsplit('.', 1)
-#             if ext is None:
-#                 raise FileNotFoundError('ファイルがありません')
-#                 # flash('ファイルがありません')
-#                 # redirect(request.url)
-#             filename = '{}--{}.{}'.format(secure_filename(name), get_formatted_datetime(), ext)
-#             image.save(os.path.join(UPLOAD_FOLDER, filename))
-#             return redirect(url_for('uploaded', filename=filename))
-#     raise Exception('ヨキセヌ例外が発生しました')
-
-#     # return render_template('find.html')
-
-
-# @api.route('/servicies/v2/uploads/<filename>')
-# def api_uploaded(filename):
-#     """
-#     画像アップロード後の画面
-#     """
-#     target = os.path.join(UPLOAD_FOLDER, filename)
-#     similars = find_similar_colors(target)
-#     a_list = [d.get('info').__dict__ for d in similars]
-
-#     response = jsonify({'img': target[len('./templates'):], 'similars': a_list})
-#     return make_response(response)
+    return error_response(error_msg)
